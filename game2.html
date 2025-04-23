@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>L’Énigme du Temple</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .scene { position: relative; max-width: 700px; margin: 0 auto; }
+    .scene img { width: 100%; height: auto; display: block; }
+    .click-zone {
+      position: absolute;
+      cursor: pointer;
+    }
+    #game-message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid #ffc107;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 1.2em;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    #game-message.show {
+      opacity: 1;
+    }
+    #chronometer {
+      position: fixed;
+      bottom: 10px;
+      right: 20px;
+      background: rgba(0, 255, 255, 0.15);
+      color: #00FFFF;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 1.2em;
+      text-shadow: 0 0 10px #00FFFF;
+      box-shadow: 0 0 20px #00FFFF;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-menu" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar hidden">
+    <ul>
+      <li><a href="index.html">✔️ Menu Principal</a></li>
+      <li><a href="credits.html">🛡️ Crédits</a></li>
+      <li><a href="settings.html" class="active">⚙️ Paramètres</a></li>
+      <li><a href="admin.html">🔒 Se connecter en tant qu'admin</a></li>
+	  <li><a href="times.html">⏱️ Temps réalisés</a></li>
+    </ul>
+  </div>
+  <div class="content">
+    <header><h1>Escape Game : L’Énigme du Temple</h1></header>
+    <div id="chronometer">Temps : 00:00</div>
+    <div class="scene">
+      <img src="A_digital_illustration_depicts_an_ancient,_dimly_l.png" alt="Temple Interactif">
+      <div class="click-zone" style="top:35%; left:20%; width:20%; height:20%;" onclick="takeScroll(this)"></div>
+      <div class="click-zone" style="top:20%; left:45%; width:25%; height:45%;" onclick="inspectSarcophagus(this)"></div>
+      <div class="click-zone" style="top:70%; left:65%; width:25%; height:15%;" onclick="stepOnTile(this)"></div>
+    </div>
+    <div id="game-message"></div>
+  </div>
+  <script src="script.js"></script>
+  <script>
+    let templeInventory = { scroll: false, sarcophagus: false };
+    let seconds = 0;
+    let timerInterval;
+
+    function showMessage(text) {
+      const box = document.getElementById("game-message");
+      box.textContent = text;
+      box.classList.add("show");
+      setTimeout(() => box.classList.remove("show"), 3000);
+    }
+
+    function takeScroll(el) {
+      templeInventory.scroll = true;
+      el.style.pointerEvents = 'none';
+      showMessage("📜 Vous avez récupéré le parchemin sacré !");
+    }
+
+    function inspectSarcophagus(el) {
+      if (templeInventory.scroll) {
+        templeInventory.sarcophagus = true;
+        el.style.pointerEvents = 'none';
+        showMessage("⚰️ Vous avez ouvert le sarcophage grâce au parchemin.");
+      } else {
+        showMessage("🚫 Vous ne comprenez pas les symboles. Il vous manque un indice.");
+      }
+    }
+
+    function stepOnTile(el) {
+      if (templeInventory.sarcophagus) {
+        clearInterval(timerInterval);
+        const chrono = document.getElementById("chronometer").textContent.replace("Temps : ", "");
+        let times = JSON.parse(localStorage.getItem("escape_times") || "{}");
+        times["enigme_du_temple"] = chrono;
+        localStorage.setItem("escape_times", JSON.stringify(times));
+
+        showMessage("🏆 Un mécanisme s'active... Vous avez terminé le temple en " + chrono + " !");
+        setTimeout(() => window.location.href = "index.html", 3000);
+      } else {
+        showMessage("💨 Vous entendez un bruit, mais rien ne se passe...");
+      }
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        seconds++;
+        const min = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const sec = String(seconds % 60).padStart(2, '0');
+        document.getElementById("chronometer").textContent = `Temps : ${min}:${sec}`;
+      }, 1000);
+    }
+
+    function toggleSidebar() {
+      document.querySelector(".sidebar").classList.toggle("hidden");
+    }
+
+    window.onload = startTimer;
+	unlockNextGame(1); // pour game2
+  </script>
+</body>
+</html>

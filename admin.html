@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connexion Admin</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Menu latéral -->
+  <button class="toggle-menu" onclick="toggleSidebar()">☰</button>
+  <nav class="sidebar">
+    <ul>
+      <li><a href="index.html">✔️ Menu Principal</a></li>
+      <li><a href="credits.html">🛡️ Crédits</a></li>
+      <li><a href="settings.html">⚙️ Paramètres</a></li>
+      <li><a href="admin.html" class="active">🔒 Se connecter en tant qu'admin</a></li>
+	  <li><a href="times.html">⏱️ Temps réalisés</a></li>
+    </ul>
+  </nav>
+
+  <div class="content">
+    <header>
+      <div class="logo">
+        <h1>ESCAPE GAME - ADMIN</h1>
+      </div>
+    </header>
+
+    <!-- Connexion -->
+    <div class="admin-login" id="login-section">
+      <h2>🔒 Connexion Admin</h2>
+      <form onsubmit="login(event)">
+        <label for="username">🆔 Identifiant</label>
+        <input type="text" id="username" name="username" required />
+        <label for="password">🗝️ Mot de passe</label>
+        <input type="password" id="password" name="password" required />
+        <button type="submit" class="btn">Se connecter</button>
+      </form>
+    </div>
+
+    <!-- Panneau admin (affiché après login) -->
+    <div id="admin-panel" style="display:none;">
+      <h2>Gestion des Jeux</h2>
+      <div id="game-list"></div>
+	<hr style="margin: 40px 0;">
+
+	<h3 style="color: #00FFFF;">Ajouter un nouveau jeu</h3>
+	<div class="admin-add">
+	  <input type="text" id="new-title" placeholder="Titre du jeu" required>
+	  <input type="text" id="new-desc" placeholder="Description du jeu" required>
+	  <input type="text" id="new-img" placeholder="Lien image (URL)" required>
+	  <button class="btn" onclick="addNewGame()">Ajouter</button>
+	</div>
+    </div>
+
+    <footer>
+      <p class="cred">&copy; 2025 Escape Game. Valentin Borne.</p>
+    </footer>
+  </div>
+
+  <!-- Script JS -->
+  <script src="script.js"></script>
+  <script>
+    const adminUsername = "admin";
+    const adminPassword = "1234";
+
+    function login(event) {
+      event.preventDefault();
+      const u = document.getElementById("username").value;
+      const p = document.getElementById("password").value;
+
+      if (u === adminUsername && p === adminPassword) {
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("admin-panel").style.display = "block";
+        loadAdminGames("game-list");
+      } else {
+        alert("Identifiants incorrects");
+      }
+    }
+  </script>
+
+</body>
+</html>

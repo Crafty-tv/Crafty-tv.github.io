@@ -1,0 +1,312 @@
+/* style.css - Responsive, menu activable, et texte centré */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #111;
+  color: white;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.toggle-menu {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background-color: #00FFFF;
+  border: none;
+  color: #111;
+  font-size: 1.2em;
+  padding: 10px 15px;
+  border-radius: 5px;
+  z-index: 1001;
+  cursor: pointer;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  background-color: #222;
+  padding-top: 60px;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+  text-align: center;
+}
+
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 20px 0;
+}
+
+.sidebar ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2em;
+  display: block;
+  padding: 10px 0;
+  transition: background-color 0.3s;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: #00FFFF;
+}
+
+.content {
+  margin-left: 250px;
+  padding: 20px;
+  transition: margin-left 0.3s;
+  text-align: center;
+}
+
+.sidebar.hidden ~ .content {
+  margin-left: 0;
+}
+
+header {
+  background-color: #222;
+  padding: 20px 0;
+}
+
+header .logo h1 {
+  color: #00FFFF;
+  font-size: 2.5em;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.btn {
+  background-color: #00FFFF;
+  color: #111;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #00b3b3;
+}
+
+.games-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.nos-jeux {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.game-cards {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.game-card {
+  background-color: #333;
+  color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 400px;
+  max-width: 90%;
+  min-height: 480px;
+  margin: 20px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 255, 255, 0.5);
+}
+
+.game-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 3px solid #00FFFF;
+}
+
+.game-card h3 {
+  font-size: 1.5em;
+  margin-top: 10px;
+  color: #00FFFF;
+}
+
+.admin-login, .settings-card, .credit-card {
+  background-color: #222;
+  max-width: 500px;
+  margin: 100px auto;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+  text-align: center;
+}
+
+.admin-login h2,
+.settings-card h2,
+.credit-card h2 {
+  font-size: 2em;
+  color: #00FFFF;
+  margin-bottom: 30px;
+}
+
+.admin-login input,
+.settings-card input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  background-color: #333;
+  color: white;
+  text-align: center;
+}
+
+.admin-login input:focus,
+.settings-card input:focus {
+  outline: none;
+  box-shadow: 0 0 5px #00FFFF;
+}
+
+.credit-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+  padding: 20px;
+}
+
+.credit-name {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: white;
+}
+
+#action-image {
+  display: block;
+  margin: 20px auto;
+  max-width: 80%;
+  border: 4px solid #00FFFF;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.visible {
+    transform: translateX(0);
+  }
+  .content {
+    margin-left: 0;
+    padding-top: 60px;
+  }
+  .game-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.popup-message {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 255, 255, 0.15);
+  color: white;
+  border: 1px solid #00FFFF;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  text-align: center;
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.popup-message.show {
+  opacity: 1;
+}
+.time-entry {
+  background-color: #222;
+  border: 1px solid #00FFFF;
+  border-radius: 8px;
+  margin: 10px auto;
+  padding: 15px;
+  width: 90%;
+  max-width: 500px;
+  color: white;
+  font-size: 1.2em;
+}
+.card-time {
+  background-color: #333;
+  border-radius: 12px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  color: white;
+  text-align: center;
+  font-size: 1.1em;
+  transition: transform 0.2s ease;
+}
+.card-time h2 {
+  color: #00FFFF;
+  margin-bottom: 10px;
+}
+.card-time p {
+  font-weight: bold;
+  font-size: 1.3em;
+}
+.card-time:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+}
+.card-time-global {
+  background-color: #222;
+  border-radius: 15px;
+  padding: 30px;
+  max-width: 600px;
+  margin: 40px auto;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+  text-align: center;
+}
+
+.card-time-global .card-title {
+  color: #00FFFF;
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 20px;
+}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>La Chambre Secrète</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .scene { position: relative; max-width: 1000px; margin: 0 auto; }
+    .scene img { width: 100%; height: auto; display: block; }
+    .click-zone {
+      position: absolute;
+      cursor: pointer;
+    }
+    #game-message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 255, 255, 0.15);
+      color: white;
+      border: 1px solid #00FFFF;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 1.2em;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    #game-message.show {
+      opacity: 1;
+    }
+    #code-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #222;
+      padding: 20px;
+      border: 2px solid #00FFFF;
+      border-radius: 10px;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 0 20px rgba(0,255,255,0.5);
+      text-align: center;
+    }
+    #code-modal input {
+      padding: 10px;
+      font-size: 1.1em;
+      margin: 10px 0;
+      width: 100px;
+      text-align: center;
+    }
+    #code-modal button {
+      padding: 8px 16px;
+      font-size: 1em;
+      background-color: #00FFFF;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #chronometer {
+      position: fixed;
+      bottom: 10px;
+      right: 20px;
+      background: rgba(0, 255, 255, 0.15);
+      color: #00FFFF;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 1.2em;
+      text-shadow: 0 0 10px #00FFFF;
+      box-shadow: 0 0 20px #00FFFF;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-menu" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar hidden">
+    <ul>
+      <li><a href="index.html">✔️ Menu Principal</a></li>
+      <li><a href="credits.html">🛡️ Crédits</a></li>
+      <li><a href="settings.html" class="active">⚙️ Paramètres</a></li>
+      <li><a href="admin.html">🔒 Se connecter en tant qu'admin</a></li>
+	  <li><a href="times.html">⏱️ Temps réalisés</a></li>
+    </ul>
+  </div>
+  <div class="content">
+    <header><h1>Escape Game : La Chambre Secrète</h1></header>
+    <div id="chronometer">Temps : 00:00</div>
+    <div class="scene">
+      <img src="A_2D_digital_illustration_depicts_an_interactive_e.png" alt="Escape Room Bureau">
+		  <!-- Clé (étagère) -->
+		<div class="click-zone" style="top:18%; left:8%; width:20%; height:10%;" onclick="collectItem('key', this, '🔑 Vous avez trouvé une clé sur l’étagère !')"></div>
+
+		<!-- Boîte à code (étagère du milieu) -->
+		<div class="click-zone" style="top:35%; left:11%; width:14%; height:10%;" onclick="openBox(this)"></div>
+
+
+		<!-- Leurre : chaise -->
+		<div class="click-zone" style="top:64%; left:10%; width:18%; height:8%;" onclick="fakeDrawer(this)"></div>
+
+		<!-- Tiroir verrouillé -->
+		<div class="click-zone" style="top:48%; left:46%; width:14%; height:8%;" onclick="showCodeModal()"></div>
+
+		<!-- Coffre final -->
+		<div class="click-zone" style="top:60%; left:75%; width:24%; height:35%;" onclick="tryOpenSafe(this)"></div>
+    </div>
+    <div id="code-modal">
+      <p>Entrez le code :</p>
+      <input type="text" id="user-code" maxlength="6">
+      <br>
+      <button onclick="validateCode()">Valider</button>
+    </div>
+    <div id="game-message"></div>
+  </div>
+  <script src="script.js"></script>
+  <script>
+    let inventory = {
+      key: false,
+      code: false,
+      codeRead: false,
+      drawerOpen: false
+    };
+
+    let seconds = 0;
+    let timerInterval;
+
+    function showMessage(text) {
+      const box = document.getElementById("game-message");
+      box.textContent = text;
+      box.classList.add("show");
+      setTimeout(() => box.classList.remove("show"), 3000);
+    }
+
+    function collectItem(item, el, message) {
+      if (!inventory[item]) {
+        inventory[item] = true;
+        el.style.pointerEvents = 'none';
+        showMessage(message);
+      }
+    }
+
+    function openBox(el) {
+      if (inventory.key) {
+        inventory.code = true;
+        el.style.pointerEvents = 'none';
+        showMessage("📦 La boîte s’ouvre avec la clé... Vous trouvez un papier marqué '8257'.");
+      } else {
+        showMessage("🔒 Cette boîte est verrouillée. Il vous faut une clé.");
+      }
+    }
+
+    function viewCode(el) {
+      inventory.codeRead = true;
+      el.style.pointerEvents = 'none';
+      showMessage("📄 Vous lisez un code griffonné : 8257. Cela pourrait vous servir...");
+    }
+
+    function fakeDrawer(el) {
+      el.style.pointerEvents = 'none';
+      showMessage("❌ Ce tiroir est vide. Ce n’est pas le bon endroit.");
+    }
+
+    function showCodeModal() {
+      if (inventory.code || inventory.codeRead) {
+        document.getElementById("code-modal").style.display = "block";
+      } else {
+        showMessage("🔐 Le tiroir est verrouillé et comporte un code à 4 chiffres.");
+      }
+    }
+
+    function validateCode() {
+      const input = document.getElementById("user-code").value;
+      if (input === "8257") {
+        inventory.drawerOpen = true;
+        showMessage("🗃️ Le tiroir se déverrouille avec un *clic* métallique.");
+        document.getElementById("code-modal").style.display = "none";
+      } else {
+        showMessage("❌ Code incorrect. Vérifiez le papier ou regardez autour de vous.");
+      }
+    }
+
+    function tryOpenSafe(el) {
+      if (inventory.drawerOpen) {
+        clearInterval(timerInterval);
+        const chrono = document.getElementById("chronometer").textContent.replace("Temps : ", "");
+        let times = JSON.parse(localStorage.getItem("escape_times") || "{}");
+        times["la_chambre_secrete"] = chrono;
+        localStorage.setItem("escape_times", JSON.stringify(times));
+        showMessage("🏆 Le coffre s’ouvre avec un déclic ! Jeu terminé en " + chrono + " !");
+        setTimeout(() => window.location.href = "index.html", 3000);
+      } else {
+        showMessage("🚪 Le coffre est verrouillé. Quelque chose manque encore...");
+      }
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        seconds++;
+        const min = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const sec = String(seconds % 60).padStart(2, '0');
+        document.getElementById("chronometer").textContent = `Temps : ${min}:${sec}`;
+      }, 1000);
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.querySelector(".sidebar");
+      sidebar.classList.toggle("hidden");
+    }
+
+    window.onload = startTimer;
+	unlockNextGame(0); // pour game1
+  </script>
+</body>
+</html>
