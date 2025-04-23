@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Game - Accueil</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Menu latéral -->
+	<button class="toggle-menu" onclick="toggleSidebar()">☰</button>
+    <nav class="sidebar">
+        <ul>
+            <li><a href="index.html" class="active">✔️ Menu Principal</a></li>
+            <li><a href="credits.html">🛡️ Crédits</a></li>
+            <li><a href="settings.html">⚙️ Paramètres</a></li>
+            <li><a href="admin.html">🔒 Se connecter en tant qu'admin</a></li>
+			<li><a href="times.html">⏱️ Temps réalisés</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="content">
+	
+        <!-- En-tête -->
+        <header>
+            <div class="logo">
+                <h1>Escape Game</h1>
+            </div>
+        </header>
+
+        <!-- Section Intro -->
+        <main>
+            <section class="intro">
+				<h2 id="welcome-title"></h2>
+                <p>Plongez dans une aventure pleine de mystères et d'énigmes à résoudre.</p>
+            </section>
+
+            <!-- Section des jeux -->
+            <section class="games-section">
+                <h2 class="nos-jeux">🕹️ Nos Jeux</h2>
+                <div class="game-cards">
+					<div class="game-cards" id="game-cards"></div>
+                </div>
+            </section>
+			<footer>
+				<p class="cred">&copy; 2025 Escape Game. Valentin Borne.</p>
+			</footer>
+			
+
+		<script src="script.js"></script>
+
+			
+        </main>
+    </div>
+
+
+</body>
+</html>
