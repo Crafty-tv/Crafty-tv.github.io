@@ -224,22 +224,7 @@ header .logo h1 {
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
-@media screen and (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-  }
-  .sidebar.visible {
-    transform: translateX(0);
-  }
-  .content {
-    margin-left: 0;
-    padding-top: 60px;
-  }
-  .game-cards {
-    flex-direction: column;
-    align-items: center;
-  }
-}
+
 .popup-message {
   position: fixed;
   bottom: 30px;
@@ -309,4 +294,17 @@ header .logo h1 {
   font-size: 1.8em;
   font-weight: bold;
   margin-bottom: 20px;
+}
+#chronometer {
+  position: fixed;
+  bottom: 40px;   /* remonte le chrono plus haut */
+  right: 20px;
+  background: rgba(0, 255, 255, 0.15);
+  color: #00FFFF;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 1.2em;
+  text-shadow: 0 0 10px #00FFFF;
+  box-shadow: 0 0 20px #00FFFF;
+  z-index: 999;
 }
