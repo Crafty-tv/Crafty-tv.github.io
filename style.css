@@ -308,3 +308,54 @@ header .logo h1 {
   box-shadow: 0 0 20px #00FFFF;
   z-index: 999;
 }
+
+.game-section {
+  text-align: center;
+  margin-top: 2em;
+}
+.section-title.facile {
+  display: block;
+  width: 100%;
+  color: cyan;
+  font-size: 2em;
+  margin: 2em auto 0.5em;
+  text-align: center;
+  text-shadow: 0 0 10px cyan;
+  border-bottom: 2px solid cyan;
+  padding-bottom: 0.3em;
+}
+
+.section-title.facile::after {
+  content: "";
+  display: block;
+  margin: 6px auto 0;
+  width: 60px;
+  height: 3px;
+  background: cyan;
+  border-radius: 10px;
+  box-shadow: 0 0 8px cyan;
+}
+
+.section-title.difficile {
+  display: block;
+  width: 100%;
+  color: orangered;
+  font-size: 2em;
+  margin: 3em auto 0.5em;
+  text-align: center;
+  text-shadow: 0 0 10px orangered;
+  border-bottom: 2px solid orangered;
+  padding-bottom: 0.3em;
+}
+
+.section-title.difficile::after {
+  content: "";
+  display: block;
+  margin: 6px auto 0;
+  width: 60px;
+  height: 3px;
+  background: orangered;
+  border-radius: 10px;
+  box-shadow: 0 0 8px orangered;
+}
+

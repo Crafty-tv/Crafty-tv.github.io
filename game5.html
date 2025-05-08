@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Bibliothèque Interdite</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+  .scene { position: relative; max-width: 900px; margin: auto; }
+  .scene img { width: 100%; height: auto; display: block; }
+
+  .click-zone {
+    position: absolute;
+    cursor: pointer;
+    border: 2px dashed transparent;
+  }
+  .click-zone:hover {
+    border-color: rgba(0,255,255,0.4);
+  }
+
+  .input-popup {
+    position: fixed;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: #111; color: white;
+    border: 2px solid #00ffff;
+    padding: 20px; border-radius: 10px;
+    display: none; z-index: 1000;
+  }
+
+  .input-popup input {
+    padding: 8px; font-size: 1em;
+    background: #000;
+    color: cyan;
+    border: 2px solid cyan;
+    border-radius: 8px;
+    outline: none;
+    box-shadow: 0 0 10px cyan;
+  }
+
+  .input-popup button {
+    margin-top: 10px;
+    background: #00ffff; border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  #message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%; transform: translateX(-50%);
+    background: rgba(0,255,255,0.1);
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #fff; font-size: 1.1em;
+    display: none; z-index: 1000;
+  }
+
+  </style>
+</head>
+<body>
+  <button class="toggle-menu" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar hidden">
+    <ul>
+      <li><a href="index.html">✔️ Menu Principal</a></li>
+      <li><a href="credits.html">🛡️ Crédits</a></li>
+	  <li><a href="settings.html">⚙️ Paramètres</a></li>
+	  <li><a href="admin.html" class="active">🔒 Se connecter en tant qu'admin</a></li>
+      <li><a href="times.html">⏱️ Temps réalisés</a></li>
+    </ul>
+  </div>
+  <div class="content">
+    <header><h1>Escape Game : La Bibliothèque Interdite</h1></header>
+    <div class="scene" style="position: relative;">
+      <div id="chronometer">Temps : 00:00</div>
+      <img src="A_digital_illustration_in_a_vintage,_semi-realisti.png" alt="Bibliothèque">
+
+      <div class="click-zone" style="top:10%; left:60%; width:15%; height:35%;" onclick="openInput(0)"></div>
+      <div class="click-zone" style="top:52%; left:5%; width:12%; height:10%;" onclick="openInput(1)"></div>
+      <div class="click-zone" style="top:70%; left:38%; width:17%; height:10%;" onclick="openInput(2)"></div>
+      <div class="click-zone" style="top:47%; left:80%; width:15%; height:10%;" onclick="openInput(3)"></div>
+      <div class="click-zone" style="top:70%; left:75%; width:20%; height:15%;" onclick="openInput(4)"></div>
+    </div>
+
+    <div class="input-popup" id="popup">
+      <p id="question"></p>
+      <input type="text" id="answer" />
+      <button onclick="checkAnswer()">Valider</button>
+      <button onclick="closePopup()" style="margin-left:10px">✖</button>
+    </div>
+
+    <div id="message"></div>
+    <script>
+      const questions = [
+        { q: "Qui a écrit Le Rouge et le Noir ?", a: "stendhal" },
+        { q: "Dans quelle ville vit Meursault dans L'Étranger ?", a: "alger" },
+        { q: "Quel poète a écrit Les Fleurs du mal ?", a: "baudelaire" },
+        { q: "Quelle est la nationalité de Franz Kafka ?", a: "tchèque" },
+        { q: "Complétez : Il faut cultiver...", a: "notre jardin" }
+      ];
+
+      let currentIndex = -1;
+      let solved = Array(5).fill(false);
+      let seconds = 0;
+      let timer;
+
+      function openInput(index) {
+        if (solved[index]) {
+          showMessage("✅ Déjà résolu.");
+          return;
+        }
+        currentIndex = index;
+        document.getElementById("question").innerText = questions[index].q;
+        document.getElementById("answer").value = "";
+        document.getElementById("popup").style.display = "block";
+      }
+
+      function closePopup() {
+        document.getElementById("popup").style.display = "none";
+      }
+
+      function checkAnswer() {
+        const input = document.getElementById("answer").value.toLowerCase().trim();
+        if (input === questions[currentIndex].a) {
+          solved[currentIndex] = true;
+          closePopup();
+          showMessage("🎉 Bonne réponse !");
+          if (solved.every(v => v)) escape();
+        } else {
+          showMessage("❌ Mauvaise réponse");
+        }
+      }
+
+      function showMessage(text) {
+        const msg = document.getElementById("message");
+        msg.innerText = text;
+        msg.style.display = "block";
+        setTimeout(() => msg.style.display = "none", 3000);
+      }
+
+      function escape() {
+        clearInterval(timer);
+        const chrono = document.getElementById("chronometer").textContent.replace("Temps : ", "");
+        let times = JSON.parse(localStorage.getItem("escape_times") || "{}");
+        times["bibliotheque"] = chrono;
+        localStorage.setItem("escape_times", JSON.stringify(times));
+        unlockNextGame(4);
+        showMessage("🚪 Toutes les réponses sont correctes ! Vous êtes libre !");
+        setTimeout(() => window.location.href = "index.html", 3000);
+      }
+
+      function startTimer() {
+        timer = setInterval(() => {
+          seconds++;
+          const min = String(Math.floor(seconds / 60)).padStart(2, '0');
+          const sec = String(seconds % 60).padStart(2, '0');
+          document.getElementById("chronometer").textContent = `Temps : ${min}:${sec}`;
+        }, 1000);
+      }
+
+      function toggleSidebar() {
+        document.querySelector(".sidebar").classList.toggle("hidden");
+      }
+
+      window.onload = startTimer;
+    </script>
+    <script src="script.js"></script>
+  </div>
+</body>
+</html>

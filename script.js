@@ -24,6 +24,24 @@ if (!localStorage.getItem("games")) {
       desc: "Un héritage familial… ou un passage secret ?",
       img: "A_2D_digital_illustration_depicts_an_attic_filled_.png",
       locked: true
+    },
+	{
+      title: "La Bibliothèque Interdite",
+      desc: "Un vieux bureau poussiéreux rempli d’objets mystérieux",
+      img: "A_digital_illustration_in_a_vintage,_semi-realisti.png",
+      locked: false
+    },
+	{
+      title: "Le Cabinet des Curiosités",
+      desc: "un escape game littéraire immersif avec des énigmes textuelles.",
+      img: "A_digital_illustration_depicts_a_study_room_in_vin.png",
+      locked: true
+    },
+	{
+      title: "Le Théâtre Maudit",
+      desc: "Un ancien théâtre abandonné où chaque zone te pose une énigme de culture générale en lien avec l'art, la mythologie, l'histoire ou la littérature.",
+      img: "A_2D_digital_illustration_depicts_an_interactive_p.png",
+      locked: true
     }
   ];
   localStorage.setItem("games", JSON.stringify(defaultGames));
@@ -35,20 +53,53 @@ function displayGames(containerId) {
   const games = JSON.parse(localStorage.getItem("games")) || [];
   container.innerHTML = "";
 
-  games.forEach((game, index) => {
-    if (!game.locked) {
-      const card = document.createElement("div");
-      card.classList.add("game-card");
-      card.innerHTML = `
-        <img src="${game.img}" alt="${game.title}">
-        <h3>${game.title}</h3>
-        <p>${game.desc}</p>
-        <a href="game${index + 1}.html" class="btn">Jouer</a>
-      `;
-      container.appendChild(card);
-    }
-  });
+    const easyTitle = document.createElement("h2");
+	easyTitle.className = "section-title facile";
+	easyTitle.textContent = "Facile";
+	container.appendChild(easyTitle); // <-- ici
+  for (let i = 0; i < 4 && i < games.length; i++) {
+    const game = games[i];
+    const card = document.createElement("div");
+    card.classList.add("game-card");
+
+    card.innerHTML = `
+      <img src="${game.img}" alt="${game.title}">
+      <h3>${game.title}</h3>
+      <p>${game.desc}</p>
+      ${
+        !game.locked
+          ? `<a href="game${i + 1}.html" class="btn">Jouer</a>`
+          : `<span class="btn" style="opacity: 0.4; cursor: not-allowed;">🔒 Verrouillé</span>`
+      }
+    `;
+    container.appendChild(card);
+  }
+
+    const hardTitle = document.createElement("h2");
+	hardTitle.className = "section-title difficile";
+	hardTitle.textContent = "Difficile";
+	container.appendChild(hardTitle); // <-- ici
+  for (let i = 4; i < games.length; i++) {
+    const game = games[i];
+    const card = document.createElement("div");
+    card.classList.add("game-card");
+
+    card.innerHTML = `
+      <img src="${game.img}" alt="${game.title}">
+      <h3>${game.title}</h3>
+      <p>${game.desc}</p>
+      ${
+        !game.locked
+          ? `<a href="game${i + 1}.html" class="btn">Jouer</a>`
+          : `<span class="btn" style="opacity: 0.4; cursor: not-allowed;">🔒 Verrouillé</span>`
+      }
+    `;
+    container.appendChild(card);
+  }
 }
+
+
+
 
 // Affichage côté admin
 function loadAdminGames(containerId) {
@@ -162,6 +213,8 @@ function toggleSidebar() {
     sidebar.classList.remove("visible");
   }
 }
+
+
 
 // Chargement automatique à l’ouverture
 window.addEventListener("DOMContentLoaded", () => {
